@@ -16,37 +16,37 @@ node{
       }
       
       stage('Build Docker Image'){
-         sh 'docker build -t rajnikhattarrsinha/javademoapp_$JOB_NAME:$BUILD_NUMBER .'
+         sh 'docker build -t ramakumarja/javademoapp_$JOB_NAME:$BUILD_NUMBER .'
       }  
    
       stage('Publish Docker Image'){
-         withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerPWD')]) {
-              sh "docker login -u rajnikhattarrsinha -p ${dockerPWD}"
+         withCredentials([string(credentialsId: 'dockerpwdram', variable: 'dockerPWD')]) {
+              sh "docker login -u ramakumarja -p ${dockerPWD}"
          }
         sh 'docker push rajnikhattarrsinha/javademoapp_$JOB_NAME:$BUILD_NUMBER'
         sh "sed -i.bak 's/#BUILD-NUMBER#/$BUILD_NUMBER/' deployment.yaml"
         sh "sed -i.bak 's/#JOB-NAME#/$JOB_NAME/' deployment.yaml"
       }
           
-    /*
+
       // ********* For Azure Cluster**************************
       stage('Deploy'){
          def k8Apply= "kubectl apply -f deployment.yaml" 
-         withCredentials([string(credentialsId: 'k8pwd', variable: 'k8PWD')]) {
-          sh "sshpass -p ${k8PWD} ssh -o StrictHostKeyChecking=no ubuntu@104.211.154.236" 
-          sh "sshpass -p ${k8PWD} scp -r deployment.yaml ubuntu@104.211.154.236:/home/ubuntu" 
-          sh "sshpass -p ${k8PWD} ssh  -o StrictHostKeyChecking=no ubuntu@104.211.154.236 ${k8Apply}"
+         withCredentials([string(credentialsId: 'k8pwdram', variable: 'k8PWD')]) {
+          sh "sshpass -p ${k8PWD} ssh -o StrictHostKeyChecking=no ubuntu@13.69.97.31" 
+          sh "sshpass -p ${k8PWD} scp -r deployment.yaml ubuntu@13.69.97.31:/home/ubuntu" 
+          sh "sshpass -p ${k8PWD} ssh  -o StrictHostKeyChecking=no ubuntu@13.69.97.31 ${k8Apply}"
          }
        }
-      */
+
          
        
-    
+    /*
        
       // ********* For AWS Cluster**************************
       stage('Deploy'){
          def k8Apply= "kubectl apply -f deployment.yaml" 
-         withCredentials([string(credentialsId: 'k8pwdrajni', variable: 'k8PWD')]) {
+         withCredentials([string(credentialsId: 'k8pwdram', variable: 'k8PWD')]) {
              sh "sshpass -p ${k8PWD} ssh -o StrictHostKeyChecking=no devops@54.196.52.131"  
              sh "sshpass -p ${k8PWD} scp -r deployment.yaml devops@54.196.52.131:/home/devops" 
              sh "sshpass -p ${k8PWD} ssh -o StrictHostKeyChecking=no devops@54.196.52.131 ${k8Apply}"
@@ -54,3 +54,5 @@ node{
        }
         
   }
+  
+  */
